@@ -21,7 +21,9 @@ repositories {
 
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude(group = "commons-logging", module = "commons-logging")
+    }
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -40,6 +42,11 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+    implementation("io.grpc:grpc-netty-shaded:1.60.0") // Adjust to the latest stable version
+    implementation("io.netty:netty-tcnative-boringssl-static:2.0.61.Final")
+
+
 }
 
 
