@@ -8,7 +8,10 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FirestoreConfig {
@@ -16,13 +19,14 @@ public class FirestoreConfig {
     @Bean
     public Firestore firestore() {
         try {
-            String serviceAccountPath = System.getenv("FIREBASE_CONFIG_PATH");
+            String firebaseConfigJson = System.getenv("FIREBASE_CONFIG_JSON");
 
-            if (serviceAccountPath == null || serviceAccountPath.isEmpty()) {
-                throw new RuntimeException("Environment variable FIREBASE_CONFIG_PATH is not set or is empty.");
+            if (firebaseConfigJson == null || firebaseConfigJson.isEmpty()) {
+                throw new RuntimeException("Environment variable FIREBASE_CONFIG_JSON is not set or is empty.");
             }
 
-            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(serviceAccountPath));
+            InputStream serviceAccount = new ByteArrayInputStream(firebaseConfigJson.getBytes(StandardCharsets.UTF_8));
+            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
                     .build();
@@ -35,4 +39,5 @@ public class FirestoreConfig {
             throw new RuntimeException("Error initializing Firestore: " + e.getMessage(), e);
         }
     }
+
 }
