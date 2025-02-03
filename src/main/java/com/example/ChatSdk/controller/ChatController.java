@@ -24,6 +24,12 @@ public class ChatController {
         this.firestoreService = firestoreService;
     }
 
+
+    @GetMapping("/")
+    public String home() {
+        return "App is running!";
+    }
+
     @PostMapping("/create")
     public ResponseEntity<String> createChatRoom(@RequestBody ChatRoom chatRoom) {
         firestoreService.addChatRoom(chatRoom)
